@@ -8,7 +8,12 @@ using Discord.Commands;
 namespace SuperBot_2._0.Modules.Admin
 {
     [Name("Owner")]
-    class Owner
+    public class Owner
     {
+        [Command("restart")]
+        public async Task Restartbot()
+        {
+            await Task.Delay(1);
+        }
     }
 }
