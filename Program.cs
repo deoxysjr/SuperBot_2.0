@@ -15,6 +15,7 @@ namespace SuperBot_2_0
     {
         private static void Main(string[] args)
         {
+            Console.Title = "SuperBot 2.0";
             Console.SetBufferSize(Console.BufferWidth + 10, Console.BufferHeight - 150);
             Console.SetWindowSize(Console.WindowWidth + 10, Console.WindowHeight);
             new Program().MainAsync().GetAwaiter().GetResult();
