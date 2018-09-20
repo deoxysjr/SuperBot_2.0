@@ -301,3 +301,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+discordkey.txt
+serversettings.json
+SuperBot_2.0.csproj
+TestModules/TestRank.cs
+BackGrounds/DefaultBackGround.xcf
