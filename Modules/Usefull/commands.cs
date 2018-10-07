@@ -1,19 +1,16 @@
 ﻿using Discord.Commands;
-using Newtonsoft.Json;
+using Discord;
 using RestSharp;
 using StrawPollNET.Enums;
 using SuperBot_2._0.Services;
-using SuperBotDLL1_0.Classes.GuildUntils;
-using SuperBotDLL1_0.RankingSystem;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
+using SuperBotDLL1_0.Gambling;
 
 namespace SuperBot_2._0.Modules.Usefull
 {
@@ -22,17 +19,7 @@ namespace SuperBot_2._0.Modules.Usefull
         [Command("test"), RequireOwner]
         public async Task Test()
         {
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load($"./file/ranks/users/{Context.User.Id}.xml");
-            TestJson guild = new TestJson();
-            //GuildChannel guild = new GuildChannel(Context.Guild);
-            string output = JsonConvert.SerializeObject(guild);
-
-            using (StreamWriter writer = new StreamWriter("./file/jsontext.json"))
-            {
-                writer.Write(output);
-            }
-            await ReplyAsync(DateTime.Now.ToLongTimeString());
+            await ReplyAsync("", false, Hangman.CreateHangmanGame(Context.Guild.Id.ToString(), Context.Channel.Id.ToString()));
         }
 
         [Command("jessie")]
@@ -81,7 +68,7 @@ namespace SuperBot_2._0.Modules.Usefull
             return client.Execute(request);
         }
 
-        public Image RoundCorners(Image img)
+        public System.Drawing.Image RoundCorners(System.Drawing.Image img)
         {
             Bitmap bmp = new Bitmap(img.Width, img.Height);
             using (GraphicsPath gp = new GraphicsPath())
@@ -201,7 +188,7 @@ namespace SuperBot_2._0.Modules.Usefull
                 return wrappedLines;
             }
 
-            public static Bitmap DrawTextToBitmap(string text, Font font, Color color, DrawMethod mode, RectangleF rectanglef)
+            public static Bitmap DrawTextToBitmap(string text, Font font, System.Drawing.Color color, DrawMethod mode, RectangleF rectanglef)
             {
                 StringFormat drawFormat = new StringFormat();
                 Bitmap bmp;

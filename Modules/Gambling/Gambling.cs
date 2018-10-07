@@ -38,6 +38,12 @@ namespace SuperBot_2._0.Modules.Gambling
             }
         }
 
+        [Command("hangman"), RequireOwner]
+        public async Task Hangman()
+        {
+            await Task.Delay(1);
+        }
+
         [Group("Race"), Name("Gambling")]
         public class Race : ModuleBase
         {

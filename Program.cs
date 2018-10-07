@@ -33,7 +33,8 @@ namespace SuperBot_2_0
             "cucumber", "egg", "eggplant", "grain", "grape", "kiwi", "lemon", "melon", "milk", "orange",
             "peach", "peanuts", "pear", "pineapple", "potato", "strawberry", "sugarcane", "tomato" };
         public static string[] craftlist = { "gold", "iron", "ring", "crown", "bakedegg", "flour", "sugar", "glass", "refinedoil" };
-        public static Dictionary<string, int> mineprices = new Dictionary<string, int>() { { "gem", 100 }, { "stone", 15 }, { "goldore", 25 }, { "ironore", 20 }, { "coal", 25 }, { "oil", 150 }, { "sand", 15 } };
+        public static Dictionary<string, int> mineprices = new Dictionary<string, int>() { { "gem", 100 }, { "stone", 15 }, { "goldore", 25 }, { "ironore", 20 }, { "coal", 25 },
+            { "oil", 150 }, { "sand", 15 } };
         public static Dictionary<string, int> pickprices = new Dictionary<string, int>() { {"apple", 20}, {"avocado", 15}, {"banana", 20}, {"carrot", 25}, {"cherries", 20},
             { "chillies", 15}, {"corn", 20}, {"cucumber", 25}, { "egg", 10 }, {"eggplant", 25}, { "grain", 15 }, {"grape", 20}, {"kiwi", 20}, {"lemon", 25}, {"melon", 25}, { "milk", 20 }, {"orange", 20}, {"peach", 20},
                 {"peanuts", 15}, {"pear", 20}, {"pineapple", 25}, {"potato", 25}, {"strawberry", 20}, { "sugarcane", 25 }, {"tomato", 20} };
