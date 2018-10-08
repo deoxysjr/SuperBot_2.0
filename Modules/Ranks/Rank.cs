@@ -226,7 +226,7 @@ namespace SuperBot_2._0.Modules.Ranks
             user.Save(Context.User.Id);
         }
 
-        [Command("resetdaily"), RequireOwner]
+        [Command("resetdaily")]
         public async Task Reset()
         {
             if (Context.User.Id == 245140333330038785)
@@ -316,9 +316,10 @@ namespace SuperBot_2._0.Modules.Ranks
             }
         }
 
-        [Command("forcelevel"), RequireOwner]
-        public async Task LevelUpUser()
+        [Command("forcelevelup"), RequireOwner]
+        public async Task LevelUpUser(IUser getuser = null)
         {
+            if (getuser == null)
             LevelUser user = new LevelUser();
             user.Load(Context.User.Id);
             user.LevelUpUser(Context.User);
