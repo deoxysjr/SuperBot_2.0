@@ -2,9 +2,11 @@
 using Discord.WebSocket;
 using SuperBot_2_0;
 using SuperBotDLL1_0.Classes.GuildUntils;
+using SuperBotDLL1_0.Gambling;
 using SuperBotDLL1_0.RankingSystem;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -21,7 +23,8 @@ namespace SuperBot_2._0.Services
             client.MessageReceived += HandleCommandAsync;
             client.UserJoined += HandleUserJoin;
             client.UserLeft += HandleUserLeft;
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+            client.Ready += async () => await client.SetGameAsync($"Guild users {client.Guilds.Sum(x => x.MemberCount)}");
+            await Program._commands.AddModulesAsync(Assembly.GetEntryAssembly());
         }
 
         private static async Task HandleUserLeft(SocketGuildUser arg)
@@ -56,9 +59,9 @@ namespace SuperBot_2._0.Services
             UserInfo info = new UserInfo(arg.Author.Id);
             info.AddMessage();
 
+            var context = new SocketCommandContext(client, msg);
             if (msg.HasStringPrefix("%", ref pos) || msg.HasMentionPrefix(client.CurrentUser, ref pos))
             {
-                var context = new SocketCommandContext(client, msg);
                 GuildChannel guild = new GuildChannel(context.Guild);
                 if (!guild.CommandsOn || guild.DisChannelsList.Contains(arg.Channel.Id) == false || msg.Content == "%disable")
                 {
@@ -83,6 +86,8 @@ namespace SuperBot_2._0.Services
                     //await msg.Channel.SendMessageAsync("commands can't be used in this channel");
                 }
             }
+
+            Hangman.GetInput(msg.Content.ToLower(), context);
 
             if (arg.Author.IsBot && arg.Author.Id != 372615866652557312)
                 return;

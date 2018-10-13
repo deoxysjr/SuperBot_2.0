@@ -8,6 +8,7 @@ namespace SuperBot_2._0.Modules.Gambling
     public class Gambling : ModuleBase
     {
         [Command("roll")]
+        [Summary("Guess what it will roll")]
         public async Task Roll(int max, int guess, double bid, int times = 1)
         {
             LevelUser user = new LevelUser();
@@ -25,6 +26,7 @@ namespace SuperBot_2._0.Modules.Gambling
         }
 
         [Command("slot")]
+        [Summary("Gamble your money away by playing slots")]
         public async Task Slot(double amount)
         {
             LevelUser user = new LevelUser();
@@ -38,10 +40,11 @@ namespace SuperBot_2._0.Modules.Gambling
             }
         }
 
-        [Command("hangman"), RequireOwner]
-        public async Task Hangman()
+        [Command("hangman")]
+        [Summary("Play a game of hangman")]
+        public async Task HangMan()
         {
-            await Task.Delay(1);
+            await ReplyAsync("", false, Hangman.CreateHangmanGame(Context.Guild.Id.ToString(), Context.Channel.Id.ToString()));
         }
 
         [Group("Race"), Name("Gambling")]

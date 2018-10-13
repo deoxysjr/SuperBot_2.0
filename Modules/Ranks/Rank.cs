@@ -319,7 +319,6 @@ namespace SuperBot_2._0.Modules.Ranks
         [Command("forcelevelup"), RequireOwner]
         public async Task LevelUpUser(IUser getuser = null)
         {
-            if (getuser == null)
             LevelUser user = new LevelUser();
             user.Load(Context.User.Id);
             user.LevelUpUser(Context.User);
