@@ -17,6 +17,7 @@ namespace SuperBot_2._0.Modules.Help
         }
 
         [Command("help")]
+        [Summary("**help**?")]
         public async Task HelpAsync([Remainder]string command = null)
         {
             var builder = new EmbedBuilder();
@@ -86,6 +87,7 @@ namespace SuperBot_2._0.Modules.Help
         }
 
         [Command("module")]
+        [Summary("Gets the commands of a module")]
         public async Task Helpasync(string module)
         {
             string prefix = "%";

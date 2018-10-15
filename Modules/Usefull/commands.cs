@@ -17,18 +17,21 @@ namespace SuperBot_2._0.Modules.Usefull
     public class Commands : ModuleBase
     {
         [Command("test"), RequireOwner]
+        [Summary("test command")]
         public async Task Test()
         {
             await ReplyAsync("", false, Hangman.CreateHangmanGame(Context.Guild.Id.ToString(), Context.Channel.Id.ToString()));
         }
 
         [Command("jessie")]
+        [Summary("praise jessie")]
         public async Task Jessie()
         {
             await ReplyAsync("Jessie it the best!");
         }
 
         [Command("strawpoll")]
+        [Summary("WIP")]
         public async Task Strawpoll(string title, params string[] options)
         {
             try

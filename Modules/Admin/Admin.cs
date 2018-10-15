@@ -23,7 +23,7 @@ namespace SuperBot_2._0.Modules.Admin
         private static List<PerformanceCounter> cpuCounters = new List<PerformanceCounter>();
         private static List<PerformanceCounter> core = new List<PerformanceCounter>();
 
-        [Command("playing")]
+        [Command("playing"), RequireOwner]
         [Alias("play")]
         public async Task Play(string game)
         {

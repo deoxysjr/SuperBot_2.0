@@ -51,6 +51,7 @@ namespace SuperBot_2._0.Modules.Gambling
         public class Race : ModuleBase
         {
             [Command("create")]
+            [Summary("Create a race")]
             public async Task Create(int racers)
             {
                 //if (Context.Guild.)
@@ -58,6 +59,7 @@ namespace SuperBot_2._0.Modules.Gambling
             }
 
             [Command("join")]
+            [Summary("Join a race if a race has been created")]
             public async Task Join(double bid, int racer)
             {
                 LevelUser user = new LevelUser();
@@ -69,6 +71,7 @@ namespace SuperBot_2._0.Modules.Gambling
             }
 
             [Command("start")]
+            [Summary("Starts a race when more than 4 people joined the race")]
             public async Task Start()
             {
                 await ReplyAsync(await Races.StartRaceAsync(Context));

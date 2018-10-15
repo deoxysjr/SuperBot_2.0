@@ -87,8 +87,6 @@ namespace SuperBot_2._0.Services
                 }
             }
 
-            Hangman.GetInput(msg.Content.ToLower(), context);
-
             if (arg.Author.IsBot && arg.Author.Id != 372615866652557312)
                 return;
             else
@@ -108,6 +106,8 @@ namespace SuperBot_2._0.Services
                     Console.WriteLine($"User:{arg.Author.Id}" + ex.ToString());
                 }
             }
+
+            Hangman.GetInput(msg.Content.ToLower(), context);
         }
     }
 }
