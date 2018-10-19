@@ -15,7 +15,7 @@ namespace SuperBot_2._0.Services
     internal class Handlers
     {
         private static readonly IServiceProvider services = Program._services;
-        private static readonly DiscordSocketClient client = Program._client;
+        private static readonly DiscordShardedClient client = Program._client;
         private static readonly CommandService commands = Program._commands;
 
         public static async Task InitHandlers()
@@ -59,7 +59,7 @@ namespace SuperBot_2._0.Services
             UserInfo info = new UserInfo(arg.Author.Id);
             info.AddMessage();
 
-            var context = new SocketCommandContext(client, msg);
+            var context = new ShadedCommandContext(client, msg);
             if (msg.HasStringPrefix("%", ref pos) || msg.HasMentionPrefix(client.CurrentUser, ref pos))
             {
                 GuildChannel guild = new GuildChannel(context.Guild);
@@ -73,7 +73,7 @@ namespace SuperBot_2._0.Services
                     {
                         info.AddCommand();
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine($"{DateTime.Now,-19} [{msg.Channel.Name}] [{msg.Author.Id}] Used {msg.ToString()}");
+                        Console.WriteLine($"{DateTime.Now,-19} [{msg.Channel.Name}] [Shard: #{client.GetShardIdFor(context.Guild)}] [{msg.Author.Id}] Used {msg.ToString()}");
                         Console.ForegroundColor = ConsoleColor.White;
                         CommandUsed.CommandAdd();
                     }

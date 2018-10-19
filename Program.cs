@@ -43,8 +43,9 @@ namespace SuperBot_2_0
 
         private Program()
         {
-            _client = new DiscordSocketClient(new DiscordSocketConfig
+            _client = new DiscordShardedClient(new DiscordSocketConfig
             {
+				TotalShards = 3,
                 LogLevel = LogSeverity.Info,
                 WebSocketProvider = WS4NetProvider.Instance
             });
