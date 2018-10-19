@@ -23,7 +23,7 @@ namespace SuperBot_2_0
                 new Program().MainAsync().GetAwaiter().GetResult();
         }
 
-        public static DiscordSocketClient _client;
+        public static DiscordShardedClient _client;
         public static readonly CommandService _commands = new CommandService();
         public static DateTime StartupTime = DateTime.Now;
         public static IServiceProvider _services;
@@ -79,7 +79,7 @@ namespace SuperBot_2_0
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.White;
 
-            File.AppendAllText("error.txt", $"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}\r\n");
+            //File.AppendAllText("error.txt", $"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}\r\n");
 
             return Task.CompletedTask;
         }
@@ -100,7 +100,7 @@ namespace SuperBot_2_0
             await Task.Delay(-1);
         }
 
-        private string GetAllUsers(DiscordSocketClient client)
+        private string GetAllUsers(DiscordShardedClient client)
         {
             string output = "Guild users ";
             int usercount = 0;

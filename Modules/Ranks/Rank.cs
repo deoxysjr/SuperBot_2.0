@@ -14,7 +14,7 @@ namespace SuperBot_2._0.Modules.Ranks
 {
     public class Rank : ModuleBase
     {
-        private DiscordSocketClient client = Program._client;
+        private DiscordShardedClient client = Program._client;
 
         [Group("rank"), Name("Rank")]
         public class RankGroup : ModuleBase

@@ -23,7 +23,7 @@ namespace SuperBot_2._0.Services
             client.MessageReceived += HandleCommandAsync;
             client.UserJoined += HandleUserJoin;
             client.UserLeft += HandleUserLeft;
-            client.Ready += async () => await client.SetGameAsync($"Guild users {client.Guilds.Sum(x => x.MemberCount)}");
+            //client.Ready += async () => await client.SetGameAsync($"Guild users {client.Guilds.Sum(x => x.MemberCount)}");
             await Program._commands.AddModulesAsync(Assembly.GetEntryAssembly());
         }
 
@@ -59,7 +59,7 @@ namespace SuperBot_2._0.Services
             UserInfo info = new UserInfo(arg.Author.Id);
             info.AddMessage();
 
-            var context = new ShadedCommandContext(client, msg);
+            var context = new ShardedCommandContext(client, msg);
             if (msg.HasStringPrefix("%", ref pos) || msg.HasMentionPrefix(client.CurrentUser, ref pos))
             {
                 GuildChannel guild = new GuildChannel(context.Guild);
