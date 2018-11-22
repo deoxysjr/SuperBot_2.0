@@ -16,7 +16,7 @@ namespace SuperBot_2._0.Modules.Gambling
             if (times > 10)
                 await ReplyAsync("I can't handle that many times");
             else if (max <= 1)
-                await ReplyAsync("I won't allowe you to do that");
+                await ReplyAsync("I won't allow you to do that");
             else if (guess < 1 || guess > max)
                 await ReplyAsync($"the number you guessed isn't even between 1-{max}");
             else if (user.Credits < bid * double.Parse(times.ToString()))
@@ -71,7 +71,7 @@ namespace SuperBot_2._0.Modules.Gambling
             }
 
             [Command("start")]
-            [Summary("Starts a race when more than 4 people joined the race")]
+            [Summary("Starts a race when more than 4 people have joined")]
             public async Task Start()
             {
                 await ReplyAsync(await Races.StartRaceAsync(Context));
