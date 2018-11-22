@@ -31,12 +31,12 @@ namespace SuperBot_2._0.Modules.Ranks
             {
                 UserInfo info = new UserInfo(Context.User.Id);
                 if (!Ranking.BackGroundList.ContainsKey(back))
-                    await ReplyAsync("i don't know that background try another one");
+                    await ReplyAsync("i don't know that background, try another one");
                 else
                 {
                     if (info.BackGround == back)
                     {
-                        await ReplyAsync("You're allready using this background");
+                        await ReplyAsync("You're already using this background");
                     }
                     else
                     {
@@ -69,7 +69,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 {
                     if (info.BackGround == Ranking.BackGroundStringlist[back])
                     {
-                        await ReplyAsync("You're allready using this background");
+                        await ReplyAsync("You're already using this background");
                     }
                     else
                     {
@@ -99,7 +99,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 if (type == 0)
                 {
                     if (info.Ranktype == "embed")
-                        await ReplyAsync("It's allready set to embed");
+                        await ReplyAsync("It's already set to embed");
                     else
                     {
                         info.ChangeRankType("embed");
@@ -109,7 +109,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 else if (type == 1)
                 {
                     if (info.Ranktype == "image")
-                        await ReplyAsync("It's allready set to image");
+                        await ReplyAsync("It's already set to image");
                     else
                     {
                         info.ChangeRankType("image");
@@ -129,7 +129,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 if (type == "embed")
                 {
                     if (info.Ranktype == "embed")
-                        await ReplyAsync("It's allready set to embed");
+                        await ReplyAsync("It's already set to embed");
                     else
                     {
                         info.ChangeRankType("embed");
@@ -139,7 +139,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 else if (type == "image")
                 {
                     if (info.Ranktype == "image")
-                        await ReplyAsync("It's allready set to image");
+                        await ReplyAsync("It's already set to image");
                     else
                     {
                         info.ChangeRankType("image");
@@ -281,7 +281,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 await ReplyAsync("", false, Ranking.Picker(embed, path, Context.User.Id.ToString(), amount, Program.baginv).Build());
             }
             else
-                await ReplyAsync("Sorry but I can't pick that much stuf");
+                await ReplyAsync("Sorry, but I can't pick that much stuf");
         }
 
         [Command("bag"), Alias("inventory")]
