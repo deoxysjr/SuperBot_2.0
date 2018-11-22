@@ -39,7 +39,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
             else
             {
-                await ReplyAsync("Sorry but only the bot owner can use this command");
+                await ReplyAsync("Sorry, but only the bot owner can use this command");
             }
         }
 
@@ -73,7 +73,7 @@ namespace SuperBot_2._0.Modules.Admin
                 }
                 else
                 {
-                    await ReplyAsync("sorry but 100 is the maximum");
+                    await ReplyAsync("Sorry, but 100 is the maximum");
                 }
             }
             catch
@@ -148,7 +148,7 @@ namespace SuperBot_2._0.Modules.Admin
             {
                 GuildChannel guild = new GuildChannel(Context.Guild);
                 guild.DisableCommands();
-                await ReplyAsync("Commands are now enabled in all channels on this guild");
+                await ReplyAsync("Commands are now enabled in all channels in this guild");
             }
             catch (Exception ex)
             {
@@ -163,7 +163,7 @@ namespace SuperBot_2._0.Modules.Admin
             {
                 GuildChannel guild = new GuildChannel(Context.Guild);
                 guild.EnableCommands();
-                await ReplyAsync("Commands are now disabled in specific channels on this guild");
+                await ReplyAsync("Commands are now disabled in specific channels in this guild");
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@ namespace SuperBot_2._0.Modules.Admin
                 var channel = await Context.Client.GetChannelAsync(channelid);
                 list.Add("#" + channel.Name);
             }
-            builder.Title = "this is the list of disabled channels";
+            builder.Title = "This is the list of disabled channels";
             builder.Description = string.Join("\n", list);
             await ReplyAsync("", false, builder.Build());
         }
@@ -218,7 +218,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
             else
             {
-                builder.AddField("Sorry", "Sorry There aren't that many pages");
+                builder.AddField("Sorry", "Sorry,There aren't that many pages");
             }
             await ReplyAsync("", false, builder.Build());
         }
@@ -240,7 +240,7 @@ namespace SuperBot_2._0.Modules.Admin
                 }
                 else
                 {
-                    await ReplyAsync("please use an id of a role in this server");
+                    await ReplyAsync("Please use an id of a role in this server");
                 }
             }
             catch (Exception ex)
@@ -333,7 +333,7 @@ namespace SuperBot_2._0.Modules.Admin
             {
                 string[] users = Directory.GetFileSystemEntries("./file/ranks/users");
                 Ranking.CheckUsers(users, Program.mineinv, Program.baginv, Program.craftlist);
-                await ReplyAsync("All users are now up dated");
+                await ReplyAsync("All users are now updated");
             }
             catch (Exception ex)
             {
