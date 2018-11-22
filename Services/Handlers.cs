@@ -1,10 +1,12 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using SuperBot_2_0;
 using SuperBotDLL1_0.Classes.GuildUntils;
 using SuperBotDLL1_0.Gambling;
 using SuperBotDLL1_0.RankingSystem;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,14 +19,34 @@ namespace SuperBot_2._0.Services
         private static readonly IServiceProvider services = Program._services;
         private static readonly DiscordShardedClient client = Program._client;
         private static readonly CommandService commands = Program._commands;
+        private static readonly List<DiscordSocketClient> Shards = client.Shards.ToList();
+        private static int TotalUsers = 0;
+        //private static bool starting = true;
 
         public static async Task InitHandlers()
         {
             client.MessageReceived += HandleCommandAsync;
             client.UserJoined += HandleUserJoin;
             client.UserLeft += HandleUserLeft;
+            
+            //for(int i = 0; i < client.Shards.Count; i++)
+            //{
+            //    TotalUsers += Shards[i].Guilds.Sum(x => x.MemberCount);
+            //}
+            //await client.SetGameAsync($"Guild users {TotalUsers}", null, StreamType.Twitch);
+
             //client.Ready += async () => await client.SetGameAsync($"Guild users {client.Guilds.Sum(x => x.MemberCount)}");
             await Program._commands.AddModulesAsync(Assembly.GetEntryAssembly());
+        }
+
+        private static async Task AddUsersAsync()
+        {
+            foreach (var Shard in Shards)
+            {
+                TotalUsers += Shard.Guilds.Sum(x => x.MemberCount);
+            }
+            await Task.Delay(1);
+            await client.SetGameAsync($"Guild users {TotalUsers}", null, StreamType.Twitch);
         }
 
         private static async Task HandleUserLeft(SocketGuildUser arg)

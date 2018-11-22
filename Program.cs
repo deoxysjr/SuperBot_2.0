@@ -23,6 +23,7 @@ namespace SuperBot_2_0
                 new Program().MainAsync().GetAwaiter().GetResult();
         }
 
+        public static int usercount = 0;
         public static DiscordShardedClient _client;
         public static readonly CommandService _commands = new CommandService();
         public static DateTime StartupTime = DateTime.Now;
@@ -103,9 +104,11 @@ namespace SuperBot_2_0
         private string GetAllUsers(DiscordShardedClient client)
         {
             string output = "Guild users ";
-            int usercount = 0;
-            foreach (var guild in _client.Guilds)
-                usercount += guild.Users.Count;
+            foreach (DiscordSocketClient shard in client.Shards)
+            {
+                foreach (var guild in shard.Guilds)
+                    usercount += guild.Users.Count;
+            }
             output += usercount;
             return output;
         }

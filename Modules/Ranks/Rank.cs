@@ -319,11 +319,22 @@ namespace SuperBot_2._0.Modules.Ranks
         [Command("forcelevelup"), RequireOwner]
         public async Task LevelUpUser(IUser getuser = null)
         {
-            LevelUser user = new LevelUser();
-            user.Load(Context.User.Id);
-            user.LevelUpUser(Context.User);
-            user.Save(Context.User.Id);
-            await ReplyAsync("succes!");
+            if(getuser == null)
+            {
+                LevelUser user = new LevelUser();
+                user.Load(Context.User.Id);
+                user.GainXpUser(Context, (user.NeedXp - user.CurrentXp));
+                user.Save(Context.User.Id);
+                await ReplyAsync("succes!");
+            }
+            else
+            {
+                LevelUser user = new LevelUser();
+                user.Load(getuser.Id);
+                user.GainXpUser(Context, getuser, (user.NeedXp - user.CurrentXp));
+                user.Save(getuser.Id);
+                await ReplyAsync("succes!");
+            }
         }
 
         [Command("prestige")]

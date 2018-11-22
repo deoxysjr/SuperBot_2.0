@@ -43,7 +43,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("clear"), RequireBotPermission(GuildPermission.ManageMessages), RequireContext(ContextType.Guild)]
+        [Command("clear"), RequireBotPermission(GuildPermission.ManageMessages), RequireUserPermission(GuildPermission.ManageMessages), RequireContext(ContextType.Guild)]
         [Alias("clr")]
         public async Task Deleteasync(string count = null)
         {
