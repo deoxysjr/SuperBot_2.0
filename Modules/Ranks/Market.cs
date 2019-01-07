@@ -26,7 +26,7 @@ namespace SuperBot_2._0.Modules.Ranks
             {
                 Color = Color.Green
             };
-            await ReplyAsync("", false, Marketplace.Sell(builder, Context.User.Id.ToString().ToLower(), item, amount, Program.mineprices, Program.pickprices, Program.craftprice));
+            await ReplyAsync("", false, Marketplace.Sell(builder, Context.User.Id.ToString().ToLower(), item, amount, Program.mineprices, Program.pickprices, Program.craftprice).Build());
         }
     }
 }

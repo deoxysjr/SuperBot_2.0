@@ -1,16 +1,11 @@
 ﻿using Discord.Commands;
-using Discord;
 using RestSharp;
 using StrawPollNET.Enums;
 using SuperBot_2._0.Services;
+using SuperBotDLL1_0.Gambling;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Text;
 using System.Threading.Tasks;
-using SuperBotDLL1_0.Gambling;
 
 namespace SuperBot_2._0.Modules.Usefull
 {

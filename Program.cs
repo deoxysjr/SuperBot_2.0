@@ -4,6 +4,7 @@ using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SuperBot_2._0.Services;
+using SuperBotDLL1_0;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,34 +20,42 @@ namespace SuperBot_2_0
             Console.SetBufferSize(Console.BufferWidth + 10, Console.BufferHeight - 150);
             Console.SetWindowSize(Console.WindowWidth + 10, Console.WindowHeight);
             new Program().MainAsync().GetAwaiter().GetResult();
-            if (_client.LoginState == LoginState.LoggedOut)
-                new Program().MainAsync().GetAwaiter().GetResult();
         }
+
+        #region values
 
         public static int usercount = 0;
         public static DiscordShardedClient _client;
         public static readonly CommandService _commands = new CommandService();
         public static DateTime StartupTime = DateTime.Now;
         public static IServiceProvider _services;
+        public static SQLConnection Connection;
         public readonly static string levelpath = "./file/ranks/users/";
         public static string[] mineinv = { "stone", "goldore", "ironore", "gem", "coal", "oil", "sand" };
+
         public static string[] baginv = { "apple", "avocado", "banana", "carrot", "cherries", "chillies", "corn",
             "cucumber", "egg", "eggplant", "grain", "grape", "kiwi", "lemon", "melon", "milk", "orange",
             "peach", "peanuts", "pear", "pineapple", "potato", "strawberry", "sugarcane", "tomato" };
+
         public static string[] craftlist = { "gold", "iron", "ring", "crown", "bakedegg", "flour", "sugar", "glass", "refinedoil" };
+
         public static Dictionary<string, int> mineprices = new Dictionary<string, int>() { { "gem", 100 }, { "stone", 15 }, { "goldore", 25 }, { "ironore", 20 }, { "coal", 25 },
             { "oil", 150 }, { "sand", 15 } };
+
         public static Dictionary<string, int> pickprices = new Dictionary<string, int>() { {"apple", 20}, {"avocado", 15}, {"banana", 20}, {"carrot", 25}, {"cherries", 20},
             { "chillies", 15}, {"corn", 20}, {"cucumber", 25}, { "egg", 10 }, {"eggplant", 25}, { "grain", 15 }, {"grape", 20}, {"kiwi", 20}, {"lemon", 25}, {"melon", 25}, { "milk", 20 }, {"orange", 20}, {"peach", 20},
                 {"peanuts", 15}, {"pear", 20}, {"pineapple", 25}, {"potato", 25}, {"strawberry", 20}, { "sugarcane", 25 }, {"tomato", 20} };
+
         public static Dictionary<string, int> craftprice = new Dictionary<string, int>() { { "gold", 300 }, { "iron", 250 }, { "crown", 500 }, { "ring", 450 }, { "flower", 75 }, { "flour", 75 },
                                            { "sugar", 50 }, { "glass", 100 }, { "refinedoil", 200 } };
+
+        #endregion values
 
         private Program()
         {
             _client = new DiscordShardedClient(new DiscordSocketConfig
             {
-				TotalShards = 3,
+                TotalShards = 3,
                 LogLevel = LogSeverity.Info,
                 WebSocketProvider = WS4NetProvider.Instance
             });
@@ -96,21 +105,7 @@ namespace SuperBot_2_0
             await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey.txt"));
             await _client.StartAsync();
 
-            await Task.Delay(4000);
-            await _client.SetGameAsync(GetAllUsers(_client), null, StreamType.Twitch);
             await Task.Delay(-1);
-        }
-
-        private string GetAllUsers(DiscordShardedClient client)
-        {
-            string output = "Guild users ";
-            foreach (DiscordSocketClient shard in client.Shards)
-            {
-                foreach (var guild in shard.Guilds)
-                    usercount += guild.Users.Count;
-            }
-            output += usercount;
-            return output;
         }
     }
 }

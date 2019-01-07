@@ -101,7 +101,7 @@ namespace SuperBot_2._0.Modules.Help
                     {
                         var result = await cmd.CheckPreconditionsAsync(Context);
                         if (result.IsSuccess)
-                            if(!commands.Contains(prefix + cmd.Aliases.First()))
+                            if (!commands.Contains(prefix + cmd.Aliases.First()))
                                 commands.Add($"{prefix}{cmd.Aliases.First()}");
                     }
                 }

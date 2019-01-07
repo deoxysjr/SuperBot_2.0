@@ -51,25 +51,25 @@ namespace SuperBot_2._0.Modules.Admin
             {
                 if (count == null)
                 {
-                    var messageList = await Context.Channel.GetMessagesAsync().Flatten();
+                    List<IMessage> messageList = await Context.Channel.GetMessagesAsync().Flatten().ToList();
                     int num = messageList.Count();
-                    await Context.Channel.DeleteMessagesAsync(messageList);
-                    await ReplyAsync($"Deleted the last {num} messages.");
+                    ITextChannel channel = Context.Channel as ITextChannel;
+                    await channel.DeleteMessagesAsync(messageList);
                     Services.CommandUsed.ClearAdd(num + 1);
-                    var message = await Context.Channel.GetMessagesAsync(1).Flatten();
+                    var message = await ReplyAsync($"Deleted the last {num} messages.");
                     await Task.Delay(1000);
-                    await Context.Channel.DeleteMessagesAsync(message);
+                    await channel.DeleteMessageAsync(message);
                 }
                 else if (int.Parse(count) < 101)
                 {
-                    var messageList = await Context.Channel.GetMessagesAsync(int.Parse(count)).Flatten();
+                    List<IMessage> messageList = await Context.Channel.GetMessagesAsync(int.Parse(count)).Flatten().ToList();
                     int num = messageList.Count();
-                    await Context.Channel.DeleteMessagesAsync(messageList);
-                    await ReplyAsync($"Deleted the last {num} messages.");
+                    ITextChannel channel = Context.Channel as ITextChannel;
+                    await channel.DeleteMessagesAsync(messageList);
                     Services.CommandUsed.ClearAdd(num + 1);
-                    var message = await Context.Channel.GetMessagesAsync(1).Flatten();
+                    var message = await ReplyAsync($"Deleted the last {num} messages.");
                     await Task.Delay(1000);
-                    await Context.Channel.DeleteMessagesAsync(message);
+                    await channel.DeleteMessageAsync(message);
                 }
                 else
                 {
@@ -191,9 +191,9 @@ namespace SuperBot_2._0.Modules.Admin
         public async Task ServerRoles(int page = 1)
         {
             EmbedBuilder builder = new EmbedBuilder();
-            
+
             var list = new List<IRole>();
-            foreach(IRole role in Context.Guild.Roles)
+            foreach (IRole role in Context.Guild.Roles)
             {
                 if (role.Name != "@everyone")
                     list.Add(role);
@@ -223,7 +223,7 @@ namespace SuperBot_2._0.Modules.Admin
             await ReplyAsync("", false, builder.Build());
         }
 
-        [Command("addrole"), RequireOwner]
+        [Command("addrole"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task AddRole(ulong role)
         {
             var serverroles = new List<ulong>();
@@ -249,7 +249,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("removerole"), RequireOwner]
+        [Command("removerole"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task RemRole(ulong role)
         {
             try
@@ -265,7 +265,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("enableAR")]
+        [Command("enableAR"), RequireUserPermission(GuildPermission.Administrator), RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task Enableautorole()
         {
             try
@@ -280,7 +280,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("disableAR")]
+        [Command("disableAR"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task Disableautorole()
         {
             try
@@ -295,7 +295,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("Autorolelist")]
+        [Command("Autorolelist"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task RoleList()
         {
             EmbedBuilder builder = new EmbedBuilder();
@@ -323,6 +323,96 @@ namespace SuperBot_2._0.Modules.Admin
             {
                 builder.AddField("Error", ex.ToString());
                 await ReplyAsync("", false, builder.Build());
+            }
+        }
+
+        [Command("enablelevelmessage")]
+        public async Task EnableLevelMessages()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.EnableLevelMessage();
+                await ReplyAsync("Level messages are now enabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("disablelevelmessage")]
+        public async Task DisableLevelMessages()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.DisableLevelMessage();
+                await ReplyAsync("Level messages are now disabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("enabledeletemessage")]
+        public async Task EnableDeleteLevelMessages()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.EnableDeleteMessage();
+                await ReplyAsync("Level message deletion is now enabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("disabledeletemessage")]
+        public async Task DisableDeleteLevelMessages()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.DisableLevelMessage();
+                await ReplyAsync("Level message deletion is now disabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("enablegainxp")]
+        public async Task EnableXpGain()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.EnableXpGain();
+                await ReplyAsync("Xp gain is now enabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+        }
+
+        [Command("disablegainxp")]
+        public async Task DisableXpGain()
+        {
+            try
+            {
+                GuildChannel guild = new GuildChannel(Context.Guild);
+                guild.DisableXpGain();
+                await ReplyAsync("Xp gain is now disabled in this server");
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message);
             }
         }
 

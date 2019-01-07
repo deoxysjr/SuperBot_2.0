@@ -35,7 +35,7 @@ namespace SuperBot_2._0.Modules.Gambling
                 await ReplyAsync("you don't even have that many credits");
             else
             {
-                await ReplyAsync("", false, Gamble.Slot(user, amount));
+                await ReplyAsync("", false, Gamble.Slot(user, amount).Build());
                 user.Save(Context.User.Id);
             }
         }

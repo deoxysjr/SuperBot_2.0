@@ -3,15 +3,14 @@ using Discord.Commands;
 using Newtonsoft.Json;
 using SuperBot_2._0.Services;
 using SuperBotDLL1_0.color;
-using SuperBotDLL1_0.Untils.WeatherClasses;
 using SuperBotDLL1_0.Untils.ForecastClasses;
+using SuperBotDLL1_0.Untils.WeatherClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace SuperBot_2._0.Modules.Usefull
 {

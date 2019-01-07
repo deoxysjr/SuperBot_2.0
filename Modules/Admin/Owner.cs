@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Discord.Commands;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Discord.Commands;
 
 namespace SuperBot_2._0.Modules.Admin
 {
