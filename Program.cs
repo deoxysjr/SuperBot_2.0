@@ -4,7 +4,6 @@ using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SuperBot_2._0.Services;
-using SuperBotDLL1_0;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,14 +21,13 @@ namespace SuperBot_2_0
             new Program().MainAsync().GetAwaiter().GetResult();
         }
 
-        #region values
+        #region Global values
 
         public static int usercount = 0;
         public static DiscordShardedClient _client;
         public static readonly CommandService _commands = new CommandService();
         public static DateTime StartupTime = DateTime.Now;
         public static IServiceProvider _services;
-        public static SQLConnection Connection;
         public readonly static string levelpath = "./file/ranks/users/";
         public static string[] mineinv = { "stone", "goldore", "ironore", "gem", "coal", "oil", "sand" };
 
@@ -70,26 +68,30 @@ namespace SuperBot_2_0
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                     Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message} {message.Exception}");
+                    Console.ResetColor();
                     break;
 
                 case LogSeverity.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
                     break;
 
                 case LogSeverity.Info:
                     Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
                     break;
 
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
                     break;
             }
-            Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}" /*{message.Exception}"*/);
-            Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.White;
-
-            //File.AppendAllText("error.txt", $"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}\r\n");
 
             return Task.CompletedTask;
         }
@@ -102,7 +104,8 @@ namespace SuperBot_2_0
                 .BuildServiceProvider();
 
             await Handlers.InitHandlers();
-            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey.txt"));
+            //await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey.txt"));
+            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey2.txt")); //superbot v2
             await _client.StartAsync();
 
             await Task.Delay(-1);

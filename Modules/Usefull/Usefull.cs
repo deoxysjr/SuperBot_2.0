@@ -2,6 +2,8 @@
 using Discord.Commands;
 using Newtonsoft.Json;
 using SuperBot_2._0.Services;
+using SuperBotDLL1_0;
+using SuperBotDLL1_0.Classes.Encryption;
 using SuperBotDLL1_0.color;
 using SuperBotDLL1_0.Untils.ForecastClasses;
 using SuperBotDLL1_0.Untils.WeatherClasses;
@@ -79,80 +81,6 @@ namespace SuperBot_2._0.Modules.Usefull
             string arg1 = arg[0];
             int width = bmp.Width;
             int height = bmp.Height;
-            switch (arg1)
-            {
-                case "red":
-                    Sendcolor.ColorRed(width, height, Context, bmp);
-                    break;
-
-                case "lightred":
-                    Sendcolor.ColorLightRed(width, height, Context, bmp);
-                    break;
-
-                case "green":
-                    Sendcolor.ColorGreen(width, height, Context, bmp);
-                    break;
-
-                case "lightgreen":
-                    Sendcolor.ColorLightGreen(width, height, Context, bmp);
-                    break;
-
-                case "blue":
-                    Sendcolor.ColorBlue(width, height, Context, bmp);
-                    break;
-
-                case "lightblue":
-                    Sendcolor.ColorLightBlue(width, height, Context, bmp);
-                    break;
-
-                case "black":
-                case "nigger":
-                    Sendcolor.ColorBlack(width, height, Context, bmp);
-                    break;
-
-                case "white":
-                    Sendcolor.ColorWhite(width, height, Context, bmp);
-                    break;
-
-                case "lightgray":
-                    Sendcolor.ColorLightGray(width, height, Context, bmp);
-                    break;
-
-                case "gray":
-                    Sendcolor.ColorGray(width, height, Context, bmp);
-                    break;
-
-                case "yellow":
-                    Sendcolor.ColorYellow(width, height, Context, bmp);
-                    break;
-
-                case "orange":
-                    Sendcolor.ColorOrange(width, height, Context, bmp);
-                    break;
-
-                case "purple":
-                    Sendcolor.ColorPurple(width, height, Context, bmp);
-                    break;
-
-                case "random":
-                    Sendcolor.ColorRandom(width, height, Context, bmp);
-                    break;
-
-                case "randomall":
-                    Sendcolor.ColorRandomAll(width, height, Context, bmp);
-                    break;
-
-                case "randomvert":
-                    Sendcolor.ColorRandomVret(width, height, Context, bmp);
-                    break;
-
-                case "randomhor":
-                    Sendcolor.ColorRandomHor(width, height, Context, bmp);
-                    break;
-
-                default:
-                    break;
-            }
 
             if (arg[0].Contains("#"))
             {
@@ -219,6 +147,83 @@ namespace SuperBot_2._0.Modules.Usefull
                 if (File.Exists(@"./color.png"))
                 {
                     File.Delete(@"./color.png");
+                }
+            }
+            else
+            {
+                switch (arg1)
+                {
+                    case "red":
+                        Sendcolor.ColorRed(width, height, Context, bmp);
+                        break;
+
+                    case "lightred":
+                        Sendcolor.ColorLightRed(width, height, Context, bmp);
+                        break;
+
+                    case "green":
+                        Sendcolor.ColorGreen(width, height, Context, bmp);
+                        break;
+
+                    case "lightgreen":
+                        Sendcolor.ColorLightGreen(width, height, Context, bmp);
+                        break;
+
+                    case "blue":
+                        Sendcolor.ColorBlue(width, height, Context, bmp);
+                        break;
+
+                    case "lightblue":
+                        Sendcolor.ColorLightBlue(width, height, Context, bmp);
+                        break;
+
+                    case "black":
+                    case "nigger":
+                        Sendcolor.ColorBlack(width, height, Context, bmp);
+                        break;
+
+                    case "white":
+                        Sendcolor.ColorWhite(width, height, Context, bmp);
+                        break;
+
+                    case "lightgray":
+                        Sendcolor.ColorLightGray(width, height, Context, bmp);
+                        break;
+
+                    case "gray":
+                        Sendcolor.ColorGray(width, height, Context, bmp);
+                        break;
+
+                    case "yellow":
+                        Sendcolor.ColorYellow(width, height, Context, bmp);
+                        break;
+
+                    case "orange":
+                        Sendcolor.ColorOrange(width, height, Context, bmp);
+                        break;
+
+                    case "purple":
+                        Sendcolor.ColorPurple(width, height, Context, bmp);
+                        break;
+
+                    case "random":
+                        Sendcolor.ColorRandom(width, height, Context, bmp);
+                        break;
+
+                    case "randomall":
+                        Sendcolor.ColorRandomAll(width, height, Context, bmp);
+                        break;
+
+                    case "randomvert":
+                        Sendcolor.ColorRandomVret(width, height, Context, bmp);
+                        break;
+
+                    case "randomhor":
+                        Sendcolor.ColorRandomHor(width, height, Context, bmp);
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -380,10 +385,25 @@ namespace SuperBot_2._0.Modules.Usefull
             await ReplyAsync("", false, builder.Build());
         }
 
+        [Command("statistics")]
+        public async Task BotData()
+        {
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.Title = "Bot Statistics";
+
+            SQLConnection Connection = new SQLConnection();
+            Connection.ExcuteCommand("");
+
+            builder.AddField("total info", "");
+
+            await ReplyAsync("", false);
+            Connection.CloseConnection();
+        }
+
         [Command("Encrypt"), RequireOwner]
         public async Task Encrypt([Remainder]string text)
         {
-            File.AppendAllText("./encryptedmessage.txt", SuperBotDLL1_0.Untils.Encrypt.EncryptText(text));
+            File.AppendAllText("./encryptedmessage.txt", Encryption.EncryptText(text));
             await Context.Channel.SendFileAsync("./encryptedmessage.txt");
             if (File.Exists("./encryptedmessage.txt"))
                 File.Delete("./encryptedmessage.txt");
@@ -394,7 +414,7 @@ namespace SuperBot_2._0.Modules.Usefull
         {
             try
             {
-                string output = SuperBotDLL1_0.Untils.Decrypt.ToText(text);
+                string output = Encryption.ToText(text);
                 if (output.Contains("error"))
                     await ReplyAsync(output);
                 else

@@ -415,20 +415,5 @@ namespace SuperBot_2._0.Modules.Admin
                 await ReplyAsync(ex.Message);
             }
         }
-
-        [Command("CU"), RequireOwner]
-        public async Task CheckUsers()
-        {
-            try
-            {
-                string[] users = Directory.GetFileSystemEntries("./file/ranks/users");
-                Ranking.CheckUsers(users, Program.mineinv, Program.baginv, Program.craftlist);
-                await ReplyAsync("All users are now updated");
-            }
-            catch (Exception ex)
-            {
-                await ReplyAsync(ex.ToString());
-            }
-        }
     }
 }

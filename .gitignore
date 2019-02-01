@@ -302,6 +302,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 discordkey.txt
+discordkey2.txt
 serversettings.json
 SuperBot_2.0.csproj
 TestModules/TestRank.cs
