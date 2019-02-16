@@ -249,7 +249,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 {
                     Color = Color.Green
                 };
-                LevelUser user = new LevelUser();
+                MineUser user = new MineUser();
                 user.Load(Context.User.Id);
                 Random rand = new Random();
                 string path = Program.levelpath + Context.User.Id + ".xml";
@@ -272,7 +272,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 {
                     Color = Color.Green
                 };
-                LevelUser user = new LevelUser();
+                PickUser user = new PickUser();
                 user.Load(Context.User.Id);
                 Random rand = new Random();
                 string path = Program.levelpath + Context.User.Id + ".xml";
@@ -307,12 +307,12 @@ namespace SuperBot_2._0.Modules.Ranks
                 user2.Load(user.Id);
                 var UserList = new List<IUser>
                 {
-                    await Context.Client.GetUserAsync(user1.UserId),
-                    await Context.Client.GetUserAsync(user2.UserId)
+                    await Context.Client.GetUserAsync(user1.DcUserId),
+                    await Context.Client.GetUserAsync(user2.DcUserId)
                 };
                 await ReplyAsync("", false, user1.Give(user2, amount, UserList).Build());
-                user1.Save(user1.UserId);
-                user2.Save(user2.UserId);
+                user1.Save(user1.DcUserId);
+                user2.Save(user2.DcUserId);
             }
         }
 
