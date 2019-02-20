@@ -187,34 +187,31 @@ namespace SuperBot_2._0.Modules.Ranks
             }
         }
 
-        [Command("status"), RequireOwner]
-        public async Task Status(IUser user = null)
-        {
-            EmbedBuilder builder = new EmbedBuilder
-            {
-                Color = Color.Blue
-            };
-            builder = Ranking.GetMineRank(builder, Context, user);
-            builder = Ranking.GetPickRank(builder, Context, user);
-            builder = Ranking.GetCraftRank(builder, Context, user);
-            await ReplyAsync("", false, builder.Build());
-        }
-
         [Command("leaderboard"), Alias("lb")]
         public async Task LeaderBoard()
         {
-            string[] golb = RankUtils.GloLeaderBoard;
-            IUser first = client.GetUser(ulong.Parse(golb[0]));
-            IUser second = client.GetUser(ulong.Parse(golb[2]));
-            IUser third = client.GetUser(ulong.Parse(golb[4]));
-            EmbedBuilder builder = new EmbedBuilder();
-            builder.AddField("global Leaderboard", $"#1  {first.Username} lvl: {golb[1]}" + $"\n#2 {second.Username} lvl: {golb[3]}" + $"\n#3 {third.Username} lvl: {golb[5]}");
-            //string[] lolb = RankUtils.LocLeaderBoard(Context, client);
-            //IUser lofirst = client.GetUser(ulong.Parse(lolb[0]));
-            //IUser losecond = client.GetUser(ulong.Parse(lolb[2]));
-            //IUser lothird = client.GetUser(ulong.Parse(lolb[4]));
-            //builder.AddField("global Leaderboard", $"#1  {lofirst.Mention} lvl: {lolb[1]}" + $"\n#2 {losecond.Mention} lvl: {lolb[3]}" + $"\n#3 {lothird.Mention} lvl: {lolb[5]}");
-            await ReplyAsync("", false, builder.Build());
+            try
+            {
+                string[] golb = RankUtils.GloLeaderBoard();
+                IUser first = client.GetUser(ulong.Parse(golb[0]));
+                IUser second = client.GetUser(ulong.Parse(golb[3]));
+                IUser third = client.GetUser(ulong.Parse(golb[6]));
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.AddField("global Leaderboard", $"#1 {first.Username} lvl: {golb[1]} p: {golb[2]}");
+                //    + $"\n#2 {second.Id} lvl: {golb[4]} p: {golb[5]}");
+                //    + $"\n#3 {third.Username} lvl: {golb[7]} p: {golb[8]}");
+                //string[] lolb = RankUtils.LocLeaderBoard(Context, client);
+                //IUser lofirst = client.GetUser(ulong.Parse(lolb[0]));
+                //IUser losecond = client.GetUser(ulong.Parse(lolb[2]));
+                //IUser lothird = client.GetUser(ulong.Parse(lolb[4]));
+                //builder.AddField("global Leaderboard", $"#1  {lofirst.Mention} lvl: {lolb[1]}" + $"\n#2 {losecond.Mention} lvl: {lolb[3]}" + $"\n#3 {lothird.Mention} lvl: {lolb[5]}");
+                await ReplyAsync("", false, builder.Build());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
         }
 
         [Command("daily")]
@@ -231,8 +228,8 @@ namespace SuperBot_2._0.Modules.Ranks
         {
             if (Context.User.Id == 245140333330038785)
             {
-                RankUtils.ResetDaily();
-                await ReplyAsync("all dailys have been reset");
+                //RankUtils.ResetDaily();
+                //await ReplyAsync("all dailys have been reset");
             }
             else
             {
@@ -313,27 +310,6 @@ namespace SuperBot_2._0.Modules.Ranks
                 await ReplyAsync("", false, user1.Give(user2, amount, UserList).Build());
                 user1.Save(user1.DcUserId);
                 user2.Save(user2.DcUserId);
-            }
-        }
-
-        [Command("forcelevelup"), RequireOwner]
-        public async Task LevelUpUser(IUser getuser = null)
-        {
-            if (getuser == null)
-            {
-                LevelUser user = new LevelUser();
-                user.Load(Context.User.Id);
-                user.GainXpUser(Context, (user.NeedXp - user.CurrentXp));
-                user.Save(Context.User.Id);
-                await ReplyAsync("succes!");
-            }
-            else
-            {
-                LevelUser user = new LevelUser();
-                user.Load(getuser.Id);
-                user.GainXpUser(Context, getuser, (user.NeedXp - user.CurrentXp));
-                user.Save(getuser.Id);
-                await ReplyAsync("succes!");
             }
         }
 

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SuperBot_2._0.Modules.Admin
 {
-    [Name("Admin")]
+    [Name("Admin"), RequireUserPermission(GuildPermission.Administrator)]
     public class Admin : ModuleBase
     {
         private static List<float> AvailableCPU = new List<float>();
@@ -22,26 +22,6 @@ namespace SuperBot_2._0.Modules.Admin
         protected static PerformanceCounter ramCounter;
         private static List<PerformanceCounter> cpuCounters = new List<PerformanceCounter>();
         private static List<PerformanceCounter> core = new List<PerformanceCounter>();
-
-        [Command("playing"), RequireOwner]
-        [Alias("play")]
-        public async Task Play(string game)
-        {
-            if (Context.User.Id == 245140333330038785)
-            {
-                if (game == "time")
-                {
-                    var time = $"{DateTime.Now,-19}";
-                    await Program._client.SetGameAsync(time);
-                }
-                else
-                    await Program._client.SetGameAsync(game);
-            }
-            else
-            {
-                await ReplyAsync("Sorry, but only the bot owner can use this command");
-            }
-        }
 
         [Command("clear"), RequireBotPermission(GuildPermission.ManageMessages), RequireUserPermission(GuildPermission.ManageMessages), RequireContext(ContextType.Guild)]
         [Alias("clr")]
@@ -88,29 +68,7 @@ namespace SuperBot_2._0.Modules.Admin
             await ReplyAsync("https://discord.gg/nZFVvTW");
         }
 
-        [Command("uptime")]
-        public async Task UpTime()
-        {
-            EmbedBuilder builder = new EmbedBuilder
-            {
-                Title = "Status",
-                Color = Color.LightGrey
-            };
-
-            var uptime = DateTime.Now - Program.StartupTime;
-            builder.AddField("Uptime", $"I'm now up for \n{Other.CalculateTimeWithSeconds((int)Math.Round(uptime.TotalSeconds, 0))}");
-            //builder = Other.GetCpuPreformance(builder);
-            await ReplyAsync("", false, builder.Build());
-        }
-
-        [Command("guild"), RequireUserPermission(GuildPermission.KickMembers)]
-        public async Task Users(int days)
-        {
-            int users = await Context.Guild.PruneUsersAsync(days, true);
-            await ReplyAsync($"{users} users have not been online for {days} days");
-        }
-
-        [Command("addchannel"), RequireUserPermission(GuildPermission.BanMembers)]
+        [Command("addchannel"), RequireUserPermission(GuildPermission.Administrator)]
         [Alias("exclude")]
         public async Task AddChannel(IChannel channel)
         {
@@ -126,7 +84,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("removechannel"), RequireUserPermission(GuildPermission.BanMembers)]
+        [Command("removechannel"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task RemChannel(IChannel channel)
         {
             try
@@ -141,7 +99,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("disablecmd"), RequireUserPermission(GuildPermission.BanMembers)]
+        [Command("disablecmd"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task DisGuild()
         {
             try
@@ -156,7 +114,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("enablecmd"), RequireUserPermission(GuildPermission.BanMembers)]
+        [Command("enablecmd"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task EnGuild()
         {
             try
@@ -171,7 +129,7 @@ namespace SuperBot_2._0.Modules.Admin
             }
         }
 
-        [Command("channellist"), RequireUserPermission(GuildPermission.BanMembers)]
+        [Command("channellist"), RequireUserPermission(GuildPermission.Administrator)]
         public async Task ListChannels()
         {
             List<string> list = new List<string>();
