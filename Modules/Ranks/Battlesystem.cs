@@ -24,40 +24,46 @@ namespace SuperBot_2._0.Modules.Ranks
                     Title = $"a battle betwean {Context.User.Username} and {user.Username}"
                 };
                 Random rand = new Random();
-                BattleUser user1 = new BattleUser(Context.User.Id);
-                BattleUser user2 = new BattleUser(user.Id);
+                BattleUser[] users = { new BattleUser(Context.User.Id), new BattleUser(user.Id) };
+                UserInfo[] usersinfo = { new UserInfo(Context.User.Id), new UserInfo(user.Id) };
                 BattleInfo Info = new BattleInfo();
 
-                while (user1.Healt > 0.0 && user2.Healt > 0.0)
+                while (users[0].Healt > 0.0 && users[1].Healt > 0.0)
                 {
                     int turn = rand.Next(2);
                     if (turn == 0)
                     {
-                        int damage = rand.Next(int.Parse(user1.Damage[0]), int.Parse(user1.Damage[1]));
-                        double dealdamage = double.Parse(damage.ToString()) * user1.DamageMultiplier;
-                        user2.Healt -= dealdamage;
+                        int damage = rand.Next(4, 7);
+                        double dealdamage = (double)damage * users[0].DamageMultiplier;
+                        users[1].Healt -= dealdamage;
                         Info.AddDamage(dealdamage);
                     }
                     else if (turn == 1)
                     {
-                        int damage = rand.Next(int.Parse(user2.Damage[0]), int.Parse(user2.Damage[1]));
-                        double dealdamage = double.Parse(damage.ToString()) * user2.DamageMultiplier;
-                        user1.Healt -= dealdamage;
+                        int damage = rand.Next(4, 7);
+                        double dealdamage = (double)damage * users[1].DamageMultiplier;
+                        users[0].Healt -= dealdamage;
                         Info.AddDamage(dealdamage);
                     }
                     Info.Addturn();
                 }
-                if (user1.Healt > 0.0)
+                if (users[0].Healt > 0.0)
                 {
-                    builder.AddField("Victory", $"{Context.User.Username} has won this match with {user1.Healt} health left");
-                    //user1.AddWin();
-                    //user2.AddLoss();
+                    builder.AddField("Victory", $"{Context.User.Username} has won this match with {users[0].Healt} health left");
+                    if(Context.User.Id != user.Id)
+                    {
+                        usersinfo[0].AddWin();
+                        usersinfo[1].AddLost();
+                    }
                 }
                 else
                 {
-                    builder.AddField("Victory", $"{user.Username} has won this match with {user2.Healt} health left");
-                    //user1.AddLoss();
-                    //user2.AddWin();
+                    builder.AddField("Victory", $"{user.Username} has won this match with {users[1].Healt} health left");
+                    if (Context.User.Id != user.Id)
+                    {
+                        usersinfo[0].AddLost();
+                        usersinfo[1].AddWin();
+                    }
                 }
                 builder.AddField("Battle info", $"Total damage dealt: {Info.TotalDamage}\nTotal turns taken: {Info.Totalturs}");
                 CommandUsed.TotalDamageAdd(Info.TotalDamage);
