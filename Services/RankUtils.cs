@@ -1,6 +1,8 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using SuperBot_2_0;
+using SuperBotDLL1_0;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -9,53 +11,28 @@ namespace SuperBot_2._0.Services
 {
     internal class RankUtils
     {
-        public static string[] GloLeaderBoard
+        public static string[] GloLeaderBoard()
         {
-            get
+            SQLConnection connection = new SQLConnection();
+            connection.ExcuteCommand("SELECT users.dcuserid,users.sbuserid,curxp,curlvl,prestige FROM leveluser INNER JOIN users ON users.sbuserid = leveluser.sbuserid ORDER BY prestige DESC, curlvl DESC, curxp DESC LIMIT 3");
+            Console.WriteLine(connection.Reader.HasRows);
+            List<string> list = new List<string>();
+            int cur = 0;
+            if (connection.Reader.HasRows)
             {
-                string first = ""; int firstlvl = 0;
-                string second = ""; int secondlvl = 0;
-                string third = ""; int thirdlvl = 0;
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Program.levelpath);
-                XmlNode root = doc.SelectSingleNode("root/users");
-                foreach (XmlNode node in root)
+                while (connection.Reader.Read())
                 {
-                    if (int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText) > firstlvl && firstlvl == 0)
-                    {
-                        first = $"{node.Name.Replace("ID", "")}";
-                        firstlvl = int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText);
-                    }
-                    else if (int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText) > firstlvl)
-                    {
-                        third = second;
-                        thirdlvl = secondlvl;
-                        second = first;
-                        secondlvl = firstlvl;
-                        first = $"{node.Name.Replace("ID", "")}";
-                        firstlvl = int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText);
-                    }
-                    else if (int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText) > secondlvl && secondlvl == 0)
-                    {
-                        second = $"{node.Name.Replace("ID", "")}";
-                        secondlvl = int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText);
-                    }
-                    else if (int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText) > secondlvl)
-                    {
-                        third = second;
-                        thirdlvl = secondlvl;
-                        second = $"{node.Name.Replace("ID", "")}";
-                        secondlvl = int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText);
-                    }
-                    else if (int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText) > thirdlvl)
-                    {
-                        third = $"{node.Name.Replace("ID", "")}";
-                        thirdlvl = int.Parse(node.SelectSingleNode("level/currentlvl").Attributes[0].InnerText);
-                    }
+                    cur++;
+                    list.Add(connection.Reader.GetUInt64("dcuserid").ToString());
+                    list.Add(connection.Reader.GetInt32("curlvl").ToString());
+                    list.Add(connection.Reader.GetInt32("prestige").ToString());
                 }
-                string[] lb = { first, firstlvl.ToString(), second, secondlvl.ToString(), third, thirdlvl.ToString() };
-                return lb;
             }
+            Console.WriteLine(cur);
+            Console.WriteLine(list.Count);
+            connection.CloseConnection();
+            connection.Dispose();
+            return list.ToArray();
         }
 
         public static string[] LocLeaderBoard(ICommandContext Context, DiscordSocketClient client)
@@ -115,20 +92,6 @@ namespace SuperBot_2._0.Services
             }
             string[] lb = { first, firstlvl.ToString(), second, secondlvl.ToString(), third, thirdlvl.ToString() };
             return lb;
-        }
-
-        public static void ResetDaily()
-        {
-            foreach (string userpath in Directory.GetFiles("./file/ranks/users"))
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(userpath);
-                if (doc.GetElementsByTagName("lastdaily").Count > 0)
-                {
-                    doc.GetElementsByTagName("lastdaily")[0].Attributes["date"].InnerText = "";
-                    doc.Save(userpath);
-                }
-            }
         }
     }
 }

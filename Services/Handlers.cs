@@ -89,7 +89,7 @@ namespace SuperBot_2._0.Services
                 LevelUser user = new LevelUser();
                 if (!File.Exists(userpath))
                     Console.WriteLine(user.AddNewUserRank(arg.Author.Id.ToString()));
-                Ranking.CheckUser(userpath, arg.Author.Id.ToString(), Program.mineinv, Program.baginv, Program.craftlist);
+                //Ranking.CheckUser(userpath, arg.Author.Id.ToString(), Program.mineinv, Program.baginv, Program.craftlist);
 
                 UserInfo info = new UserInfo(arg.Author.Id);
                 info.AddMessage();
