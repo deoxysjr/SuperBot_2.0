@@ -57,43 +57,6 @@ namespace SuperBot_2_0
                 LogLevel = LogSeverity.Info,
                 WebSocketProvider = WS4NetProvider.Instance
             });
-            _client.Log += Logger;
-            _commands.Log += Logger;
-        }
-
-        private static Task Logger(LogMessage message)
-        {
-            switch (message.Severity)
-            {
-                case LogSeverity.Critical:
-                case LogSeverity.Error:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message} {message.Exception}");
-                    Console.ResetColor();
-                    break;
-
-                case LogSeverity.Warning:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
-                    Console.ResetColor();
-                    break;
-
-                case LogSeverity.Info:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
-                    Console.ResetColor();
-                    break;
-
-                case LogSeverity.Verbose:
-                case LogSeverity.Debug:
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
-                    Console.ResetColor();
-                    break;
-            }
-            Console.ForegroundColor = ConsoleColor.White;
-
-            return Task.CompletedTask;
         }
 
         private async Task MainAsync()
