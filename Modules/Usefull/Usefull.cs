@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Newtonsoft.Json;
-using SuperBot_2._0.Services;
+using SuperBot_2_0.Services;
 using SuperBotDLL1_0;
 using SuperBotDLL1_0.Classes.Encryption;
 using SuperBotDLL1_0.color;
@@ -14,7 +14,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Usefull
+namespace SuperBot_2_0.Modules.Usefull
 {
     public class Usefull : ModuleBase<ICommandContext>
     {

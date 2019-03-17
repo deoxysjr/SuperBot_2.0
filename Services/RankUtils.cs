@@ -1,13 +1,11 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using SuperBot_2_0;
 using SuperBotDLL1_0;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml;
 
-namespace SuperBot_2._0.Services
+namespace SuperBot_2_0.Services
 {
     internal class RankUtils
     {

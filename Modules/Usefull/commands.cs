@@ -1,13 +1,12 @@
 ﻿using Discord.Commands;
 using RestSharp;
 using StrawPollNET.Enums;
-using SuperBot_2._0.Services;
-using SuperBotDLL1_0.Gambling;
+using SuperBot_2_0.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Usefull
+namespace SuperBot_2_0.Modules.Usefull
 {
     public class Commands : ModuleBase
     {
@@ -15,7 +14,7 @@ namespace SuperBot_2._0.Modules.Usefull
         [Summary("test command")]
         public async Task Test()
         {
-            await ReplyAsync("", false, Hangman.CreateHangmanGame(Context.Guild.Id.ToString(), Context.Channel.Id.ToString()));
+            await ReplyAsync("test", false);
         }
 
         [Command("jessie")]
@@ -53,7 +52,7 @@ namespace SuperBot_2._0.Modules.Usefull
             }
         }
 
-        public IRestResponse response(string url)
+        public IRestResponse Response(string url)
         {
             var client = new RestClient()
             {

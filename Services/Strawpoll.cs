@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Services
+namespace SuperBot_2_0.Services
 {
     public class Strawpoll
     {

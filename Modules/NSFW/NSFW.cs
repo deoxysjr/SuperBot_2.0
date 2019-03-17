@@ -1,13 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
-using SuperBot_2._0.Services;
+using SuperBot_2_0.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace SuperBot_2._0.Modules.NSFW
+namespace SuperBot_2_0.Modules.NSFW
 {
     public class NSFW : ModuleBase
     {

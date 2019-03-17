@@ -2,7 +2,7 @@
 using StrawPollNET.Enums;
 using System.Collections.Generic;
 
-namespace SuperBot_2._0.Services
+namespace SuperBot_2_0.Services
 {
     public class PollRequest
     {

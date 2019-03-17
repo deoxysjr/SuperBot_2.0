@@ -1,11 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
-using SuperBot_2_0;
 using SuperBotDLL1_0.MarketPlace;
 using System;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Ranks
+namespace SuperBot_2_0.Modules.Ranks
 {
     [Group("Market")]
     public class Market : ModuleBase

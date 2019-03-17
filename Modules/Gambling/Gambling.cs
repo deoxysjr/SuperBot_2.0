@@ -3,7 +3,7 @@ using SuperBotDLL1_0.Gambling;
 using SuperBotDLL1_0.RankingSystem;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Gambling
+namespace SuperBot_2_0.Modules.Gambling
 {
     public class Gambling : ModuleBase
     {

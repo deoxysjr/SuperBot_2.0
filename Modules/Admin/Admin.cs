@@ -1,27 +1,23 @@
 ﻿using Discord;
 using Discord.Commands;
-using SuperBot_2_0;
 using SuperBotDLL1_0.Classes.GuildUntils;
-using SuperBotDLL1_0.RankingSystem;
-using SuperBotDLL1_0.Untils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Admin
+namespace SuperBot_2_0.Modules.Admin
 {
     [Name("Admin"), RequireUserPermission(GuildPermission.Administrator)]
     public class Admin : ModuleBase
     {
-        private static List<float> AvailableCPU = new List<float>();
-        private static List<float> AvailableRAM = new List<float>();
+        private static readonly List<float> AvailableCPU = new List<float>();
+        private static readonly List<float> AvailableRAM = new List<float>();
         protected static PerformanceCounter cpuCounter;
         protected static PerformanceCounter ramCounter;
-        private static List<PerformanceCounter> cpuCounters = new List<PerformanceCounter>();
-        private static List<PerformanceCounter> core = new List<PerformanceCounter>();
+        private static readonly List<PerformanceCounter> CpuCounters = new List<PerformanceCounter>();
+        private static readonly List<PerformanceCounter> Core = new List<PerformanceCounter>();
 
         [Command("clear"), RequireBotPermission(GuildPermission.ManageMessages), RequireUserPermission(GuildPermission.ManageMessages), RequireContext(ContextType.Guild)]
         [Alias("clr")]
@@ -37,8 +33,7 @@ namespace SuperBot_2._0.Modules.Admin
                     await channel.DeleteMessagesAsync(messageList);
                     Services.CommandUsed.ClearAdd(num + 1);
                     var message = await ReplyAsync($"Deleted the last {num} messages.");
-                    await Task.Delay(1000);
-                    await channel.DeleteMessageAsync(message);
+                    _ = await Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(_ => message.DeleteAsync());
                 }
                 else if (int.Parse(count) < 101)
                 {
@@ -48,8 +43,7 @@ namespace SuperBot_2._0.Modules.Admin
                     await channel.DeleteMessagesAsync(messageList);
                     Services.CommandUsed.ClearAdd(num + 1);
                     var message = await ReplyAsync($"Deleted the last {num} messages.");
-                    await Task.Delay(1000);
-                    await channel.DeleteMessageAsync(message);
+                    _ = await Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(_ => message.DeleteAsync());
                 }
                 else
                 {
@@ -65,7 +59,7 @@ namespace SuperBot_2._0.Modules.Admin
         [Command("invite"), RequireBotPermission(GuildPermission.CreateInstantInvite), RequireUserPermission(GuildPermission.CreateInstantInvite)]
         public async Task CreateInvite()
         {
-            await ReplyAsync("https://discord.gg/nZFVvTW");
+            await ReplyAsync("WIP");
         }
 
         [Command("addchannel"), RequireUserPermission(GuildPermission.Administrator)]

@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace SuperBot_2._0.Services
+namespace SuperBot_2_0.Services
 {
     internal class CommandUsed
     {

@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
-using SuperBot_2._0.Services;
+using SuperBot_2_0.Services;
 using SuperBotDLL1_0.BattleSystem;
 using SuperBotDLL1_0.RankingSystem;
 using System;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Ranks
+namespace SuperBot_2_0.Modules.Ranks
 {
     [Name("Battle")]
     public class Battlesystem : ModuleBase
@@ -50,7 +50,7 @@ namespace SuperBot_2._0.Modules.Ranks
                 if (users[0].Healt > 0.0)
                 {
                     builder.AddField("Victory", $"{Context.User.Username} has won this match with {users[0].Healt} health left");
-                    if(Context.User.Id != user.Id)
+                    if (Context.User.Id != user.Id)
                     {
                         usersinfo[0].AddWin();
                         usersinfo[1].AddLost();

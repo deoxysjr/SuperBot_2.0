@@ -1,13 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
-using SuperBot_2_0;
 using SuperBotDLL1_0.RankingSystem;
 using SuperBotDLL1_0.Untils;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Modules.Admin
+namespace SuperBot_2_0.Modules.Admin
 {
     [Name("Owner"), RequireOwner]
     public class Owner : ModuleBase

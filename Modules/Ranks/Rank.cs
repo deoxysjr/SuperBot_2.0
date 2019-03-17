@@ -1,8 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using SuperBot_2._0.Services;
-using SuperBot_2_0;
+using SuperBot_2_0.Services;
 using SuperBotDLL1_0.RankingSystem;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace SuperBot_2._0.Modules.Ranks
+namespace SuperBot_2_0.Modules.Ranks
 {
     public class Rank : ModuleBase
     {
@@ -211,7 +210,6 @@ namespace SuperBot_2._0.Modules.Ranks
             {
                 Console.WriteLine(ex.ToString());
             }
-            
         }
 
         [Command("daily")]
