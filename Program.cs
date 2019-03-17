@@ -3,7 +3,7 @@ using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SuperBot_2._0.Services;
+using SuperBot_2_0.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +47,7 @@ namespace SuperBot_2_0
         public static Dictionary<string, int> craftprice = new Dictionary<string, int>() { { "gold", 300 }, { "iron", 250 }, { "crown", 500 }, { "ring", 450 }, { "flower", 75 }, { "flour", 75 },
                                            { "sugar", 50 }, { "glass", 100 }, { "refinedoil", 200 } };
 
-        #endregion values
+        #endregion Global values
 
         private Program()
         {
@@ -100,12 +100,13 @@ namespace SuperBot_2_0
         {
             _services = new ServiceCollection()
                 .AddSingleton(_client)
+                .AddSingleton<Handlers>()
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
 
-            await Handlers.InitHandlers();
-            //await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey.txt"));
-            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey2.txt")); //superbot v2
+            await _services.GetRequiredService<Handlers>().InitializeAsync();
+            //await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey.key"));
+            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("./discordkey2.key")); //superbot v2
             await _client.StartAsync();
 
             await Task.Delay(-1);

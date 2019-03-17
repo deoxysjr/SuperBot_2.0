@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using SuperBot_2_0;
 using SuperBotDLL1_0.Classes.GuildUntils;
 using SuperBotDLL1_0.Gambling;
 using SuperBotDLL1_0.RankingSystem;
@@ -12,104 +11,69 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace SuperBot_2._0.Services
+namespace SuperBot_2_0.Services
 {
     internal class Handlers
     {
-        private static readonly IServiceProvider services = Program._services;
-        private static readonly DiscordShardedClient client = Program._client;
-        private static readonly CommandService commands = Program._commands;
-        private static readonly List<DiscordSocketClient> Shards = client.Shards.ToList();
-        private static int TotalUsers = 0;
-        //private static bool starting = true;
+        private IServiceProvider Services { get; }
+        private DiscordShardedClient Client { get; }
+        private CommandService Commands { get; }
+        private List<DiscordSocketClient> Shards { get; }
+        private int TotalUsers = 0;
 
-        public static async Task InitHandlers()
+        public Handlers(IServiceProvider service, DiscordShardedClient client, CommandService commands)
         {
-            client.MessageReceived += HandleCommandAsync;
-            client.UserJoined += HandleUserJoin;
-            client.UserLeft += HandleUserLeft;
-            client.ShardReady += ShardReady;
+            Services = service;
+            Client = client;
+            Commands = commands;
+
+            Shards = Client.Shards.ToList();
+
+            Client.MessageReceived += HandleCommandAsync;
+            Client.UserJoined += HandleUserJoin;
+            Client.UserLeft += HandleUserLeft;
+            Client.ShardReady += ShardReady;
+            Client.Log += Logger;
+            Commands.Log += Logger;
 
             commands.CommandExecuted += CommandExecuted;
-
-            await Program._commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
         }
 
-        private static async Task CommandExecuted(Optional<CommandInfo> arg1, ICommandContext context, IResult arg3)
+        public async Task InitializeAsync()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"{DateTime.Now,-19} [{context.Channel.Name}] [Shard: #{client.GetShardIdFor(context.Guild)}] [{context.User.Id}] Used {context.Message.Content}");
-            Console.ForegroundColor = ConsoleColor.White;
-            await Task.Delay(1);
+            await Program._commands.AddModulesAsync(Assembly.GetEntryAssembly(), Services);
         }
 
-        private static async Task ShardReady(DiscordSocketClient arg)
-        {
-            foreach (var guild in arg.Guilds)
-                TotalUsers += guild.Users.Count;
-
-            await client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
-        }
-
-        private static async Task AddUsersAsync()
-        {
-            
-            await Task.Delay(1);
-            await client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
-        }
-
-        private static async Task HandleUserLeft(SocketGuildUser arg)
-        {
-            await client.SetGameAsync($"Guild users {--TotalUsers}", null, ActivityType.Streaming);
-        }
-
-        private static async Task HandleUserJoin(SocketGuildUser arg)
-        {
-            GuildChannel guild = new GuildChannel(arg.Guild);
-            if (guild.AutoRoleOn)
-            {
-                if (guild.RoleList[0] != 0)
-                    await arg.AddRoleAsync(arg.Guild.GetRole(guild.RoleList[0]));
-            }
-
-            await client.SetGameAsync($"Guild users {++TotalUsers}", null, ActivityType.Streaming);
-        }
-
-        private static async Task HandleCommandAsync(SocketMessage arg)
+        private async Task HandleCommandAsync(SocketMessage arg)
         {
             try
             {
                 string userpath = Program.levelpath + arg.Author.Id + ".xml";
-                var msg = arg as SocketUserMessage;
-                if (msg == null) return;
+                if (!(arg is SocketUserMessage msg)) return;
 
-                if (msg.Author.Id == client.CurrentUser.Id || msg.Author.IsBot) return;
+                if (msg.Author.Id == Client.CurrentUser.Id || msg.Author.IsBot) return;
                 int pos = 0;
 
                 LevelUser user = new LevelUser();
                 if (!File.Exists(userpath))
                     Console.WriteLine(user.AddNewUserRank(arg.Author.Id.ToString()));
-                //Ranking.CheckUser(userpath, arg.Author.Id.ToString(), Program.mineinv, Program.baginv, Program.craftlist);
 
                 UserInfo info = new UserInfo(arg.Author.Id);
                 info.AddMessage();
 
-                var context = new ShardedCommandContext(client, msg);
+                var context = new ShardedCommandContext(Client, msg);
                 GuildChannel guild = new GuildChannel(context.Guild);
-                if (msg.HasStringPrefix("%", ref pos) || msg.HasMentionPrefix(client.CurrentUser, ref pos))
+                if (msg.HasStringPrefix("%%", ref pos) || msg.HasMentionPrefix(Client.CurrentUser, ref pos))
                 {
                     if (!guild.CommandsOn || guild.DisChannelsList.Contains(arg.Channel.Id) == false || msg.Content == "%disable")
                     {
-                        var result = await commands.ExecuteAsync(context, pos, services);
+                        var result = await Commands.ExecuteAsync(context, pos, Services);
 
                         if (!result.IsSuccess)
                             Utils.CustomErrors(msg, result, context);
                         else if (result.IsSuccess)
                         {
                             info.AddCommand();
-                            //Console.ForegroundColor = ConsoleColor.Cyan;
-                            //Console.WriteLine($"{DateTime.Now,-19} [{msg.Channel.Name}] [Shard: #{client.GetShardIdFor(context.Guild)}] [{msg.Author.Id}] Used {msg.ToString()}");
-                            //Console.ForegroundColor = ConsoleColor.White;
                             CommandUsed.CommandAdd();
                         }
                     }
@@ -118,7 +82,6 @@ namespace SuperBot_2._0.Services
                         var message = await context.Channel.GetMessageAsync(msg.Id);
                         await message.DeleteAsync();
                         CommandUsed.ClearAdd(1);
-                        //await msg.Channel.SendMessageAsync("commands can't be used in this channel");
                     }
                 }
 
@@ -146,8 +109,81 @@ namespace SuperBot_2._0.Services
             }
             catch (Exception)
             {
-
             }
+        }
+
+        private static Task Logger(LogMessage message)
+        {
+            switch (message.Severity)
+            {
+                case LogSeverity.Critical:
+                case LogSeverity.Error:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message} {message.Exception}");
+                    Console.ResetColor();
+                    break;
+
+                case LogSeverity.Warning:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
+                    break;
+
+                case LogSeverity.Info:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
+                    break;
+
+                case LogSeverity.Verbose:
+                case LogSeverity.Debug:
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"{DateTime.Now,-19} [{message.Severity}] {message.Source}: {message.Message}");
+                    Console.ResetColor();
+                    break;
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+
+            return Task.CompletedTask;
+        }
+
+        private async Task CommandExecuted(Optional<CommandInfo> arg1, ICommandContext context, IResult arg3)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"{DateTime.Now,-19} [{context.Channel.Name}] [Shard: #{Client.GetShardIdFor(context.Guild)}] [{context.User.Id}] Used {context.Message.Content}");
+            Console.ForegroundColor = ConsoleColor.White;
+            await Task.Delay(1);
+        }
+
+        private async Task ShardReady(DiscordSocketClient arg)
+        {
+            foreach (var guild in arg.Guilds)
+                TotalUsers += guild.Users.Count;
+
+            await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
+        }
+
+        private async Task AddUsersAsync()
+        {
+            await Task.Delay(1);
+            await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
+        }
+
+        private async Task HandleUserLeft(SocketGuildUser arg)
+        {
+            await Client.SetGameAsync($"Guild users {--TotalUsers}", null, ActivityType.Streaming);
+        }
+
+        private async Task HandleUserJoin(SocketGuildUser arg)
+        {
+            GuildChannel guild = new GuildChannel(arg.Guild);
+            if (guild.AutoRoleOn)
+            {
+                if (guild.RoleList[0] != 0)
+                    await arg.AddRoleAsync(arg.Guild.GetRole(guild.RoleList[0]));
+            }
+
+            await Client.SetGameAsync($"Guild users {++TotalUsers}", null, ActivityType.Streaming);
         }
     }
 }
