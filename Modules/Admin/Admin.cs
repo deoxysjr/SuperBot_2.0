@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using SuperBotDLL1_0;
 using SuperBotDLL1_0.Classes.GuildUntils;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,64 @@ namespace SuperBot_2_0.Modules.Admin
         public async Task CreateInvite()
         {
             await ReplyAsync("WIP");
+        }
+
+        [Command("command add")]
+        public async Task AddCommand(string name, [Remainder]string outputtext)
+        {
+            try
+            {
+                List<string> Commands = new List<string>();
+                SQLConnection con = new SQLConnection();
+                con.ExecuteCommand($"SELECT guildid,name FROM customcommands WHERE guildid = {Context.Guild.Id}");
+
+                if (con.Reader.HasRows)
+                {
+                    while (con.Reader.Read())
+                    {
+                        string Name = con.Reader.GetString("name");
+                        Commands.Add(Name);
+                    }
+                }
+
+                if (!Commands.Contains(name))
+                {
+                    con.ExecuteCommand($"INSERT INTO customcommands (commandid, guildid, name, output) VALUES (NULL, {Context.Guild.Id}, '{name}', '{outputtext}')");
+                    await ReplyAsync($"{name} has been added");
+                }
+                else
+                    await ReplyAsync("That command already exists");
+                con.CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        [Command("command remove")]
+        public async Task RemoveCommand(string name)
+        {
+            List<string> Commands = new List<string>();
+            SQLConnection con = new SQLConnection();
+            con.ExecuteCommand($"SELECT guildid,name FROM customcommands WHERE guildid = {Context.Guild.Id}");
+
+            if (con.Reader.HasRows)
+            {
+                while (con.Reader.Read())
+                {
+                    string Name = con.Reader.GetString("name");
+                    Commands.Add(Name);
+                }
+            }
+
+            if (Commands.Contains(name))
+            {
+                con.ExecuteCommand($"DELETE FROM customcommands WHERE customcommands.name = '{name}'");
+                await ReplyAsync($"{name} has been removed");
+            }
+            else
+                await ReplyAsync("That command doesn't exist");
         }
 
         [Command("addchannel"), RequireUserPermission(GuildPermission.Administrator)]

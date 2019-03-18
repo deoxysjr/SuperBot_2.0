@@ -48,29 +48,30 @@ namespace SuperBot_2_0.Services
         {
             try
             {
-                string userpath = Program.levelpath + arg.Author.Id + ".xml";
                 if (!(arg is SocketUserMessage msg)) return;
 
                 if (msg.Author.Id == Client.CurrentUser.Id || msg.Author.IsBot) return;
-                int pos = 0;
 
-                LevelUser user = new LevelUser();
-                if (!File.Exists(userpath))
-                    Console.WriteLine(user.AddNewUserRank(arg.Author.Id.ToString()));
+                string prefix = "%%";
+                int pos = prefix.Length - 1;
 
                 UserInfo info = new UserInfo(arg.Author.Id);
                 info.AddMessage();
 
                 var context = new ShardedCommandContext(Client, msg);
                 GuildChannel guild = new GuildChannel(context.Guild);
-                if (msg.HasStringPrefix("%%", ref pos) || msg.HasMentionPrefix(Client.CurrentUser, ref pos))
+                if (msg.HasStringPrefix(prefix, ref pos) || msg.HasMentionPrefix(Client.CurrentUser, ref pos))
                 {
-                    if (!guild.CommandsOn || guild.DisChannelsList.Contains(arg.Channel.Id) == false || msg.Content == "%disable")
+                    if (!guild.CommandsOn || guild.DisChannelsList.Contains(arg.Channel.Id) == false || msg.Content == $"{prefix}disable")
                     {
                         var result = await Commands.ExecuteAsync(context, pos, Services);
 
                         if (!result.IsSuccess)
-                            Utils.CustomErrors(msg, result, context);
+                        {
+                            var cmdresult = await CustomCommands.ExecuteCommands(context, pos);
+                            if(!cmdresult)
+                                Utils.CustomErrors(msg, result, context);
+                        }
                         else if (result.IsSuccess)
                         {
                             info.AddCommand();
@@ -91,6 +92,7 @@ namespace SuperBot_2_0.Services
                 {
                     try
                     {
+                        LevelUser user = new LevelUser();
                         CommandUsed.GainedMessagesAdd();
                         user.Load(arg.Author.Id);
                         int xp = new Random().Next(1, 5);
