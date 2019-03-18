@@ -388,11 +388,13 @@ namespace SuperBot_2_0.Modules.Usefull
         [Command("statistics")]
         public async Task BotData()
         {
-            EmbedBuilder builder = new EmbedBuilder();
-            builder.Title = "Bot Statistics";
+            EmbedBuilder builder = new EmbedBuilder
+            {
+                Title = "Bot Statistics"
+            };
 
             SQLConnection Connection = new SQLConnection();
-            Connection.ExcuteCommand("");
+            Connection.ExecuteCommand("");
 
             builder.AddField("total info", "");
 

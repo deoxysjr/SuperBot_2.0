@@ -12,7 +12,7 @@ namespace SuperBot_2_0.Services
         public static string[] GloLeaderBoard()
         {
             SQLConnection connection = new SQLConnection();
-            connection.ExcuteCommand("SELECT users.dcuserid,users.sbuserid,curxp,curlvl,prestige FROM leveluser INNER JOIN users ON users.sbuserid = leveluser.sbuserid ORDER BY prestige DESC, curlvl DESC, curxp DESC LIMIT 3");
+            connection.ExecuteCommand("SELECT users.dcuserid,users.sbuserid,curxp,curlvl,prestige FROM leveluser INNER JOIN users ON users.sbuserid = leveluser.sbuserid ORDER BY prestige DESC, curlvl DESC, curxp DESC LIMIT 3");
             Console.WriteLine(connection.Reader.HasRows);
             List<string> list = new List<string>();
             int cur = 0;
