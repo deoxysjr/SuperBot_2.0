@@ -20,23 +20,28 @@ namespace SuperBot_2_0.Services
         private CommandService Commands { get; }
         private List<DiscordSocketClient> Shards { get; }
         private int TotalUsers = 0;
+        private Dictionary<int, bool> ShardsConnected { get; }
 
         public Handlers(IServiceProvider service, DiscordShardedClient client, CommandService commands)
         {
             Services = service;
             Client = client;
             Commands = commands;
-
+            ShardsConnected = new Dictionary<int, bool>();
             Shards = Client.Shards.ToList();
 
+            //Client handlers
             Client.MessageReceived += HandleCommandAsync;
             Client.UserJoined += HandleUserJoin;
             Client.UserLeft += HandleUserLeft;
             Client.ShardReady += ShardReady;
+            Client.ShardDisconnected += ShardDisconnected;
+
+            //loggers
             Client.Log += Logger;
             Commands.Log += Logger;
 
-            commands.CommandExecuted += CommandExecuted;
+            Commands.CommandExecuted += CommandExecuted;
         }
 
         public async Task InitializeAsync()
@@ -52,7 +57,7 @@ namespace SuperBot_2_0.Services
 
                 if (msg.Author.Id == Client.CurrentUser.Id || msg.Author.IsBot) return;
 
-                string prefix = "%%";
+                string prefix = "&";
                 int pos = prefix.Length - 1;
 
                 UserInfo info = new UserInfo(arg.Author.Id);
@@ -163,6 +168,32 @@ namespace SuperBot_2_0.Services
                 TotalUsers += guild.Users.Count;
 
             await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
+
+            if (ShardsConnected.ContainsKey(arg.ShardId))
+                ShardsConnected[arg.ShardId] = true;
+            else
+                ShardsConnected.Add(arg.ShardId, true);
+        }
+
+        private async Task ShardDisconnected(Exception arg1, DiscordSocketClient arg2)
+        {
+            if (ShardsConnected.ContainsKey(arg2.ShardId))
+                ShardsConnected[arg2.ShardId] = false;
+            else
+                ShardsConnected.Add(arg2.ShardId, false);
+
+            int shardsoff = 0;
+            foreach (var shard in ShardsConnected)
+            {
+                if (shard.Value == false)
+                    shardsoff++;
+            }
+
+            if (shardsoff == Shards.Count)
+            {
+                Environment.Exit(0);
+            }
+            await Task.Delay(1);
         }
 
         private async Task AddUsersAsync()
