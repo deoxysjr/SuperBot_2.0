@@ -64,6 +64,7 @@ namespace SuperBot_2_0.Modules.Admin
         }
 
         [Command("command add")]
+        [Alias("addcom")]
         public async Task AddCommand(string name, [Remainder]string outputtext)
         {
             try
@@ -97,6 +98,7 @@ namespace SuperBot_2_0.Modules.Admin
         }
 
         [Command("command remove")]
+        [Alias("remcom")]
         public async Task RemoveCommand(string name)
         {
             List<string> Commands = new List<string>();
