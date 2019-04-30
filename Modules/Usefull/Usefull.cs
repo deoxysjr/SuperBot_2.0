@@ -3,10 +3,9 @@ using Discord.Commands;
 using Newtonsoft.Json;
 using SuperBot_2_0.Services;
 using SuperBotDLL1_0;
+using SuperBotDLL1_0.Api.Weather;
 using SuperBotDLL1_0.Classes.Encryption;
 using SuperBotDLL1_0.color;
-using SuperBotDLL1_0.Untils.ForecastClasses;
-using SuperBotDLL1_0.Untils.WeatherClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,7 +24,7 @@ namespace SuperBot_2_0.Modules.Usefull
                 city.Replace('_', ' ');
             try
             {
-                WeatherAPIcall weather = new WeatherAPIcall(city);
+                WeatherAPIcall weather = new WeatherAPIcall(city, File.ReadAllText("./Keys/weather-api.key"));
                 if (weather.ValidRequest)
                     await ReplyAsync("", false, weather.GetEmbed());
             }
@@ -56,7 +55,7 @@ namespace SuperBot_2_0.Modules.Usefull
         {
             try
             {
-                ForecastAPIcall forecast = new ForecastAPIcall(city);
+                ForecastAPIcall forecast = new ForecastAPIcall(city, File.ReadAllText("./Keys/weather-api.key"));
                 await ReplyAsync("", false, forecast.GetEmbed());
             }
             catch (Exception ex)
