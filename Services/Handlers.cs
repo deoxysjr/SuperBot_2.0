@@ -19,8 +19,8 @@ namespace SuperBot_2_0.Services
         private DiscordShardedClient Client { get; }
         private CommandService Commands { get; }
         private List<DiscordSocketClient> Shards { get; }
-        private int TotalUsers = 0;
         private Dictionary<int, bool> ShardsConnected { get; }
+        private int TotalUsers = 0;
 
         public Handlers(IServiceProvider service, DiscordShardedClient client, CommandService commands)
         {
@@ -36,6 +36,8 @@ namespace SuperBot_2_0.Services
             Client.UserLeft += HandleUserLeft;
             Client.ShardReady += ShardReady;
             Client.ShardDisconnected += ShardDisconnected;
+            Client.LeftGuild += LeftGuild;
+            Client.JoinedGuild += JoinedGuild;
 
             //loggers
             Client.Log += Logger;
@@ -112,7 +114,14 @@ namespace SuperBot_2_0.Services
                     }
                 }
 
-                Hangman.GetInput(msg.Content.ToLower(), context);
+                try
+                {
+                    Games.GetInput(msg.Content.ToLower(), context);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"User:{arg.Author.Id}: = " + ex.ToString());
+                }
             }
             catch (Exception)
             {
@@ -196,12 +205,6 @@ namespace SuperBot_2_0.Services
             await Task.Delay(1);
         }
 
-        private async Task AddUsersAsync()
-        {
-            await Task.Delay(1);
-            await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
-        }
-
         private async Task HandleUserLeft(SocketGuildUser arg)
         {
             await Client.SetGameAsync($"Guild users {--TotalUsers}", null, ActivityType.Streaming);
@@ -217,6 +220,20 @@ namespace SuperBot_2_0.Services
             }
 
             await Client.SetGameAsync($"Guild users {++TotalUsers}", null, ActivityType.Streaming);
+        }
+
+        private async Task LeftGuild(SocketGuild arg)
+        {
+            TotalUsers -= arg.Users.Count;
+
+            await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
+        }
+
+        private async Task JoinedGuild(SocketGuild arg)
+        {
+            TotalUsers += arg.Users.Count;
+
+            await Client.SetGameAsync($"Guild users {TotalUsers}", null, ActivityType.Streaming);
         }
     }
 }
