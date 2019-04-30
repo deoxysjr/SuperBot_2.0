@@ -44,7 +44,7 @@ namespace SuperBot_2_0.Modules.Gambling
         [Summary("Play a game of hangman")]
         public async Task HangMan()
         {
-            await ReplyAsync("", false, Hangman.CreateHangmanGame(Context.Guild.Id.ToString(), Context.Channel.Id.ToString()));
+            await ReplyAsync("", false, Games.CreateHangmanGame(Context.Guild.Id, Context.Channel.Id));
         }
 
         [Group("Race"), Name("Gambling")]
